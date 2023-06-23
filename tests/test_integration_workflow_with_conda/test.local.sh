@@ -57,7 +57,8 @@ md5sum --check "expected_output.md5"
 # vice versa because processing might cut off parts of reads (if testing STAR directly, add '-f 1' 
 # as additional option)
 echo "Verifying STAR output"
-result=$(bedtools intersect -F 1 -v -bed \
+result=$(singularity exec docker://quay.io/biocontainers/bedtools:2.27.1--h9a82719_5 \
+    bedtools intersect -F 1 -v -bed \
     -a ../input_files/synthetic.mate_1.bed \
     -b results/samples/synthetic_10_reads_mate_1_synthetic_10_reads_mate_1/map_genome/synthetic_10_reads_mate_1_synthetic_10_reads_mate_1.se.Aligned.sortedByCoord.out.bam \
     | wc -l)
@@ -65,7 +66,8 @@ if [ $result != "0" ]; then
     echo "Alignments for mate 1 reads are not consistent with ground truth"
     exit 1
 fi
-result=$(bedtools intersect -F 1 -v -bed \
+result=$(singularity exec docker://quay.io/biocontainers/bedtools:2.27.1--h9a82719_5 \
+    bedtools intersect -F 1 -v -bed \
     -a <(cat ../input_files/synthetic.mate_1.bed ../input_files/synthetic.mate_2.bed) \
     -b results/samples/synthetic_10_reads_paired_synthetic_10_reads_paired/map_genome/synthetic_10_reads_paired_synthetic_10_reads_paired.pe.Aligned.sortedByCoord.out.bam \
     | wc -l)
